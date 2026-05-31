@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BLITZ STACK</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:         #04061A;
+    --bg2:        #070B24;
+    --surface:    #0C1030;
+    --card:       #0F1438;
+    --card-hover: #141840;
+    --border:     #1E2448;
+    --border-soft:#161A3E;
+    --navy:       #030654;
+    --indigo:     #180840;
+    --mauve:      #B8A1FF;
+    --mint:       #D5FCFA;
+    --text:       #F0EEFF;
+    --text2:      #8B86B0;
+    --dim:        #252A52;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    background: linear-gradient(160deg, #000515 0%, #040C3A 45%, #0A1660 100%);
+    padding: 72px 48px 64px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 60% 50% at 50% -10%, rgba(184,161,255,0.13) 0%, transparent 70%),
+      radial-gradient(ellipse 40% 40% at 20% 100%, rgba(3,6,84,0.5) 0%, transparent 60%);
+    pointer-events: none;
+  }
+
+  .hero-eyebrow {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--mauve);
+    margin-bottom: 20px;
+    position: relative;
+  }
+
+  .hero-title {
+    font-size: clamp(48px, 7vw, 80px);
+    font-weight: 900;
+    letter-spacing: -2px;
+    line-height: 1.05;
+    position: relative;
+    margin-bottom: 16px;
+  }
+
+  .hero-title .word-lofix { color: #fff; }
+  .hero-title .word-vault {
+    background: linear-gradient(90deg, #B8A1FF 0%, #D5FCFA 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero-sub {
+    font-size: 15px;
+    font-weight: 400;
+    color: var(--text2);
+    letter-spacing: -0.2px;
+    line-height: 1.6;
+    max-width: 440px;
+    margin: 0 auto 32px;
+    position: relative;
+  }
+
+  .disclaimer-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(184,161,255,0.2);
+    border-radius: 999px;
+    padding: 10px 20px;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text2);
+    position: relative;
+  }
+
+  .disclaimer-pill span.dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: #ff6b6b;
+    flex-shrink: 0;
+  }
+
+  /* ── STICKY NAV ── */
+  .sticky-nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(4,6,26,0.88);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 48px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    height: 60px;
+  }
+
+  .search-wrap {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 9px 16px;
+    width: 320px;
+    transition: border-color 0.2s;
+  }
+
+  .search-wrap:focus-within { border-color: rgba(184,161,255,0.5); }
+
+  .search-wrap input {
+    background: transparent;
+    border: none;
+    outline: none;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 400;
+    color: var(--text);
+    flex: 1;
+    letter-spacing: -0.2px;
+  }
+
+  .search-wrap input::placeholder { color: var(--text2); }
+  .search-icon { color: var(--text2); font-size: 14px; }
+
+  .filter-scroll {
+    display: flex;
+    gap: 6px;
+    flex: 1;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .filter-scroll::-webkit-scrollbar { display: none; }
+
+  .filter-btn {
+    white-space: nowrap;
+    padding: 6px 14px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--text2);
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: -0.2px;
+    cursor: pointer;
+    transition: all 0.15s;
+    flex-shrink: 0;
+  }
+
+  .filter-btn:hover {
+    border-color: rgba(184,161,255,0.4);
+    color: var(--mauve);
+    background: rgba(184,161,255,0.06);
+  }
+
+  .filter-btn.active {
+    background: linear-gradient(135deg, #0A1660 0%, #180840 100%);
+    border-color: rgba(184,161,255,0.35);
+    color: var(--mauve);
+  }
+
+  .count-badge {
+    flex-shrink: 0;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 5px 12px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text2);
+    letter-spacing: -0.2px;
+  }
+
+  /* ── MAIN ── */
+  main { padding: 48px; max-width: 1400px; }
+
+  .section { margin-bottom: 56px; }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 20px;
+  }
+
+  .section-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--text2);
+    white-space: nowrap;
+  }
+
+  .section-rule {
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  .section-count {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--dim);
+    white-space: nowrap;
+  }
+
+  /* ── GRID ── */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(268px, 1fr));
+    gap: 12px;
+  }
+
+  /* ── CARD ── */
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border-soft);
+    border-radius: 16px;
+    padding: 20px 22px 18px;
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    transition: background 0.15s, border-color 0.15s, transform 0.15s, box-shadow 0.15s;
+  }
+
+  .card:hover {
+    background: var(--card-hover);
+    border-color: rgba(184,161,255,0.28);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+  }
+
+  .card-row {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 8px;
+  }
+
+  .card-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+    letter-spacing: -0.3px;
+    line-height: 1.3;
+  }
+
+  .arrow {
+    font-size: 15px;
+    color: var(--dim);
+    flex-shrink: 0;
+    margin-top: 1px;
+    transition: color 0.15s, transform 0.15s;
+  }
+
+  .card:hover .arrow {
+    color: var(--mauve);
+    transform: translate(2px, -2px);
+  }
+
+  .card-desc {
+    font-size: 12px;
+    font-weight: 400;
+    color: var(--text2);
+    line-height: 1.5;
+    letter-spacing: -0.1px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .card-tag {
+    display: inline-block;
+    align-self: flex-start;
+    margin-top: 4px;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    padding: 3px 9px;
+    border-radius: 6px;
+  }
+
+  .tag-lofix {
+    background: rgba(10,22,96,0.8);
+    color: var(--mauve);
+    border: 1px solid rgba(184,161,255,0.2);
+  }
+
+  .tag-free {
+    background: rgba(3,6,84,0.6);
+    color: var(--mint);
+    border: 1px solid rgba(213,252,250,0.18);
+  }
+
+  .card.hidden    { display: none; }
+  .section.hidden { display: none; }
+
+  /* ── FOOTER ── */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 24px 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text2);
+    letter-spacing: -0.2px;
+  }
+
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--navy); border-radius: 99px; }
+
+  @media (max-width: 700px) {
+    .hero { padding: 52px 24px 48px; }
+    .sticky-nav { padding: 0 20px; }
+    main, footer { padding-left: 20px; padding-right: 20px; }
+    .search-wrap { width: 160px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-eyebrow">Software · Plugins · Extensions</div>
+  <h1 class="hero-title">
+    <span class="word-lofix">BLITZ </span><span class="word-vault">STACK</span>
+  </h1>
+  <div class="disclaimer-pill">
+    <span class="dot"></span>
+    Use them on ur OWN risk. 
+  </div>
+</div>
+
+<!-- STICKY NAV -->
+<div class="sticky-nav">
+  <div class="search-wrap">
+    <span class="search-icon">⌕</span>
+    <input type="text" id="search" placeholder="Search anything..." autocomplete="off" spellcheck="false">
+  </div>
+  <div class="filter-scroll" id="filters"></div>
+  <span class="count-badge" id="count"></span>
+</div>
+
+<main id="main"></main>
+
+<footer>
+  <span>BLITZ STACK </span>
+  <span id="total-count"></span>
+</footer>
+
+<script>
+const data = [
+  {
+    category: "🖥️ Software",
+    items: [
+      { name: "DaVinci Resolve Studio 21", url: "https://www.mediafire.com/file/x60wnclpin7dzyl/DaVinci_Resolve_Studio_21_(Lofix).rar/file",              desc: "The color grading goat. Free version is already insane.", tag: "lofix" },
+      { name: "Adobe Photoshop 2025",      url: "https://www.mediafire.com/file_premium/41coy9wiqfjpxxw/Adobe_Photoshop_2025_%2528Lofix%2529.rar/file",    desc: "Photo editing GOAT. No further explanation needed.", tag: "lofix" },
+      { name: "Adobe Premiere Pro 2025",   url: "https://www.mediafire.com/file_premium/ficpvapzz8ivjqn/Adobe_Premiere_Pro_2025_%2528Lofix%2529.rar/file", desc: "Latest Premiere. Edit fast, render faster.", tag: "lofix" },
+      { name: "Adobe Premiere Pro 2023",   url: "https://www.mediafire.com/file_premium/b50el4cqzc9l367/Adobe_Premiere_Pro_2023_%2528Lofix%2529.rar/file", desc: "2023 build for legacy plugin compatibility.", tag: "lofix" },
+      { name: "Adobe After Effects 2025",  url: "https://www.mediafire.com/file_premium/vkaavzw9mjxsr9i/Adobe_After_Effects_2025_%2528Lofix%2529.rar/file", desc: "Motion graphics software. Make stuff move beautifully.", tag: "lofix" },
+      { name: "Adobe After Effects 2023",  url: "https://www.mediafire.com/file_premium/c7ufl2hes462e62/Adobe_After_Effects_2023_%2528Lofix%2529.rar/file", desc: "Stable 2023 AE build. Great for older plugins.", tag: "lofix" },
+      { name: "Topaz Video AI 3.1.10",     url: "https://www.mediafire.com/file/5qqr1jl31ip21wv/Topaz_Video_AI_3.1.10_%2528lofix%2529.zip/file",          desc: "AI upscaling for video. Makes old footage look new.", tag: "lofix" },
+    ]
+  },
+  {
+    category: "🔌 Plugins — Lofix",
+    items: [
+      { name: "Sapphire 2024",      url: "https://www.mediafire.com/file_premium/9l5yviec9e3idt9/Sapphire_2024%2528lofix%2529.zip/file",        desc: "270+ VFX effects. The industry standard plugin suite.", tag: "lofix" },
+      { name: "BCC 2024",           url: "https://www.mediafire.com/file_premium/pwlsg32vylivd3z/BCC_2024.rar/file",                            desc: "Boris Continuum pack. 250+ filters for AE and Premiere.", tag: "lofix" },
+      { name: "RSMB Pro",           url: "https://www.mediafire.com/file_premium/r3fphp1camqu3f2/RSMB_Pro%2528lofix%2529.rar/file",             desc: "Realistic motion blur on any footage automatically.", tag: "lofix" },
+      { name: "Element 3D",         url: "https://drive.google.com/file/d/1urtUTCmdlngiz-tGjnrP9RQVc1nzyoKx/view",                             desc: "3D models inside After Effects. No Cinema 4D needed.", tag: "lofix" },
+      { name: "Saber v1.0.4",       url: "https://www.mediafire.com/file_premium/wfsmtl2ao209gbi/Saber_v1.0.4%2528lofix%2529.zip/file",         desc: "Energy beams and lightsaber FX by Video Copilot.", tag: "lofix" },
+      { name: "Deep Glow 2 v1.0.2", url: "https://www.mediafire.com/file_premium/jk09v87wk4eza0g/Deep_Glow_2_1.0.2.rar/file",                  desc: "Physically accurate glow. Way better than native AE.", tag: "lofix" },
+      { name: "Flow v1.5.2",        url: "https://www.mediafire.com/file_premium/5jfcctapeav3cxj/Flow_v1.5.2_%2528Lofix%2529.zip/file",         desc: "Visual easing curve editor for buttery animations.", tag: "lofix" },
+      { name: "Twitch",             url: "https://www.mediafire.com/file_premium/zqfloqdtcss9zbv/Twitch_Plug-in.zip/file",                      desc: "Randomize anything in AE for glitch and chaos effects.", tag: "lofix" },
+    ]
+  },
+  {
+    category: "🆓 Plugins — Free",
+    items: [
+      { name: "FX Console v1.0.3", url: "https://www.videocopilot.net/blog/2018/05/fx-console-updated-to-v1-0-3/", desc: "Quick search for AE effects. Apply in seconds, no menus.", tag: "free" },
+      { name: "EaseCopy",          url: "https://aescripts.com/easecopy/",                                         desc: "Copy easing curves between keyframes in one click.", tag: "free" },
+      { name: "Bouncer",           url: "https://ukramedia.com/product/bouncr/",                                   desc: "Auto bounce and spring physics on any AE property.", tag: "free" },
+      { name: "Textifly",          url: "https://officialmotionsfly.gumroad.com/l/textifly",                       desc: "Text animation preset pack. Slap it on and ship.", tag: "free" },
+    ]
+  },
+
+   {
+    category: "🆓 My Own ", 
+    items: [
+      { name: "Dope Texts", url: "https://drive.google.com/drive/folders/1SYkYJj2hQjTysgbVyrxG5T3B0fMI3D_D?usp=sharing", desc: "Animtate Text Quick asf ", tag: "free" },
+    ]
+  },
+];
+
+let allCards = [];
+
+function buildUI() {
+  const main = document.getElementById('main');
+  const filtersDiv = document.getElementById('filters');
+  let total = 0;
+
+  const allBtn = document.createElement('button');
+  allBtn.className = 'filter-btn active';
+  allBtn.textContent = 'All';
+  allBtn.dataset.filter = 'all';
+  filtersDiv.appendChild(allBtn);
+
+  data.forEach(section => {
+    const btn = document.createElement('button');
+    btn.className = 'filter-btn';
+    btn.textContent = section.category;
+    btn.dataset.filter = section.category;
+    filtersDiv.appendChild(btn);
+
+    const sec = document.createElement('div');
+    sec.className = 'section';
+    sec.dataset.category = section.category;
+
+    const hdr = document.createElement('div');
+    hdr.className = 'section-header';
+    hdr.innerHTML = `
+      <span class="section-label">${section.category}</span>
+      <div class="section-rule"></div>
+      <span class="section-count">${section.items.length} items</span>`;
+    sec.appendChild(hdr);
+
+    const grid = document.createElement('div');
+    grid.className = 'grid';
+
+    section.items.forEach(item => {
+      const card = document.createElement('a');
+      card.className = 'card';
+      card.href = item.url;
+      card.target = '_blank';
+      card.rel = 'noopener noreferrer';
+      card.dataset.name = item.name.toLowerCase();
+      card.dataset.desc = item.desc.toLowerCase();
+      card.dataset.category = section.category;
+
+      const tagHtml = item.tag === 'lofix'
+        ? '<span class="card-tag tag-lofix">LOFIX</span>'
+        : '<span class="card-tag tag-free">FREE</span>';
+
+      card.innerHTML = `
+        <div class="card-row">
+          <div class="card-name">${item.name}</div>
+          <span class="arrow">↗</span>
+        </div>
+        <div class="card-desc">${item.desc}</div>
+        ${tagHtml}
+      `;
+
+      grid.appendChild(card);
+      allCards.push(card);
+      total++;
+    });
+
+    sec.appendChild(grid);
+    main.appendChild(sec);
+  });
+
+  document.getElementById('total-count').textContent = total + ' items';
+  updateCount();
+}
+
+function updateCount() {
+  const v = allCards.filter(c => !c.classList.contains('hidden')).length;
+  document.getElementById('count').textContent = v + ' items';
+}
+
+function filterByCategory(cat) {
+  document.querySelectorAll('.filter-btn').forEach(b =>
+    b.classList.toggle('active', b.dataset.filter === cat));
+  document.querySelectorAll('.section').forEach(s =>
+    s.classList.toggle('hidden', cat !== 'all' && s.dataset.category !== cat));
+  const q = document.getElementById('search').value.trim().toLowerCase();
+  if (q) doSearch(q);
+  else {
+    allCards.forEach(c =>
+      c.classList.toggle('hidden', c.closest('.section').classList.contains('hidden')));
+    updateCount();
+  }
+}
+
+function doSearch(q) {
+  allCards.forEach(card => {
+    if (card.closest('.section').classList.contains('hidden')) { card.classList.add('hidden'); return; }
+    card.classList.toggle('hidden', !card.dataset.name.includes(q) && !card.dataset.desc.includes(q));
+  });
+  updateCount();
+}
+
+document.getElementById('search').addEventListener('input', e => {
+  const q = e.target.value.trim().toLowerCase();
+  if (!q) {
+    allCards.forEach(c =>
+      c.classList.toggle('hidden', c.closest('.section').classList.contains('hidden')));
+    updateCount();
+    return;
+  }
+  doSearch(q);
+});
+
+document.getElementById('filters').addEventListener('click', e => {
+  const btn = e.target.closest('.filter-btn');
+  if (btn) filterByCategory(btn.dataset.filter);
+});
+
+buildUI();
+</script>
+</body>
+</html>
